@@ -1,0 +1,25 @@
+PRAGMA foreign_keys = ON;
+CREATE TABLE IF NOT EXISTS inventory (
+ id TEXT PRIMARY KEY, name TEXT NOT NULL, sku TEXT NOT NULL UNIQUE,
+ category TEXT NOT NULL, qty INTEGER NOT NULL DEFAULT 0 CHECK(qty >= 0),
+ min INTEGER NOT NULL DEFAULT 0 CHECK(min >= 0), cost REAL NOT NULL DEFAULT 0 CHECK(cost >= 0),
+ price REAL NOT NULL DEFAULT 0 CHECK(price >= 0), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS sales (
+ id TEXT PRIMARY KEY, date TEXT NOT NULL, customer TEXT NOT NULL, product TEXT NOT NULL,
+ product_id TEXT, qty INTEGER NOT NULL CHECK(qty > 0), total REAL NOT NULL CHECK(total >= 0),
+ status TEXT NOT NULL CHECK(status IN ('Pago','Pendente')), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(product_id) REFERENCES inventory(id) ON DELETE SET NULL
+);
+CREATE TABLE IF NOT EXISTS suppliers (
+ id TEXT PRIMARY KEY, supplier TEXT NOT NULL, description TEXT NOT NULL, due TEXT NOT NULL,
+ total REAL NOT NULL CHECK(total >= 0), status TEXT NOT NULL CHECK(status IN ('Pago','Pendente')),
+ created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS goals (
+ id TEXT PRIMARY KEY, title TEXT NOT NULL, target REAL NOT NULL CHECK(target > 0),
+ current REAL NOT NULL DEFAULT 0 CHECK(current >= 0), deadline TEXT NOT NULL,
+ created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_sales_date ON sales(date);
+CREATE INDEX IF NOT EXISTS idx_suppliers_due ON suppliers(due);

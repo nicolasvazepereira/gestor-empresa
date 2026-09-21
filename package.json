@@ -1,0 +1,15 @@
+{
+  "name": "gestor-empresa",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 migrations apply gestor-empresa-db --local",
+    "db:remote": "wrangler d1 migrations apply gestor-empresa-db --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
